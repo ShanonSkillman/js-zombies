@@ -8,6 +8,13 @@
  * @property {string} name
  */
 
+ class Item {
+   constructor(name){
+     this.name = name;
+   }
+ };
+
+
 
 /**
  * Class => Weapon(name, damage)
@@ -24,6 +31,13 @@
  * @param {number} damage   The weapon's damage.
  * @property {number} damage
  */
+
+ class Weapon extends Item {
+  constructor(name, damage){
+    super(name)
+    this.damage = damage
+  }
+ };
 
 
 /**
@@ -49,6 +63,12 @@
  * @property {number} energy
  */
 
+class Food extends Item {
+  constructor(name, energy){
+    super(name)
+    this.energy = energy
+  }
+};
 
 /**
  * Food Extends Item Class
@@ -79,6 +99,20 @@
  * @property {method} getMaxHealth         Returns private variable `maxHealth`.
  */
 
+ class Player {
+   constructor(name, health, strength, speed){
+     this._pack = []
+     this._maxHealth = health
+     this.name = name
+     this.health = health
+     this.strength = strength
+     this.speed = speed
+     this.isAlive = true
+     this.equipped = false
+     this.getPack = () => {return this._pack}
+     this.getMaxHealth = () => {return this._maxHealth}
+   }
+ 
 
 /**
  * Player Class Method => checkPack()
@@ -89,9 +123,14 @@
  * To access the pack, be sure to use Player's getPack method.
  * You should be able to invoke this function on a Player instance.
  *
- * @name checkPack
+ * @name checkPack 
  */
 
+  checkPack() {
+    console.log(this.getPack())
+  }
+
+ 
 
 /**
  * Player Class Method => takeItem(item)
@@ -111,6 +150,9 @@
  * @return {boolean} true/false     Whether player was able to store item in pack.
  */
 
+ takeItem(item) {
+   
+ }
 
 /**
  * Player Class Method => discardItem(item)
@@ -208,6 +250,7 @@
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
 
+ }
 
 /**
  * Class => Zombie(health, strength, speed)

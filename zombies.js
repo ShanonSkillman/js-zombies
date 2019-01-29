@@ -310,17 +310,18 @@ class Food extends Item {
  * @name equippedWith
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
- equippedWith (){
-   if (this.equppied){
-     console.log(this.name + " is equipped with a " + this.equipped.name);
-     return this.equipped.name
-   }else{
-     console.log(this.name + " is not equipped ");
-     return false;
-   }
 
+equippedWith() {
+  if(this.equipped !== false){
+    console.log(this.name + " has " + this.equipped.name + " equipped.")
+    return this.equipped.name;
+  }
+  else{
+    console.log(this.equipped.name + " is not equipped.")
+    return false;
+  }
  }
- };
+};
 
 /**
  * Class => Zombie(health, strength, speed)

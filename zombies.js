@@ -35,6 +35,7 @@
  class Weapon extends Item {
   constructor(name, damage){
     super(name)
+    this.name = name
     this.damage = damage
   }
  };
@@ -66,6 +67,7 @@
 class Food extends Item {
   constructor(name, energy){
     super(name)
+    this.name = name
     this.energy = energy
   }
 };
@@ -101,18 +103,24 @@ class Food extends Item {
 
  class Player {
    constructor(name, health, strength, speed){
-     this._pack = []
-     this._maxHealth = health
-     this.name = name
-     this.health = health
-     this.strength = strength
-     this.speed = speed
-     this.isAlive = true
-     this.equipped = false
-     this.getPack = () => {return this._pack}
-     this.getMaxHealth = () => {return this._maxHealth}
-   }
- 
+     this._pack = [];
+     this._maxHealth = health;
+     this.name = name;
+     this.health = health;
+     this.strength = strength;
+     this.speed = speed;
+     this.isAlive = true;
+     this.equipped = false;
+    }
+
+     getPack() {
+       return this._pack
+      }
+     getMaxHealth() {
+       return this._maxHealth
+      }
+   
+  
 
 /**
  * Player Class Method => checkPack()
@@ -128,7 +136,7 @@ class Food extends Item {
 
   checkPack() {
     console.log(this.getPack())
-  }
+  };
 
  
 
@@ -151,8 +159,15 @@ class Food extends Item {
  */
 
  takeItem(item) {
-   
- }
+   if(this._pack.length >= 3){
+    console.log(Player.name + ' your bag swag is too full, no can store')
+     return false
+   }else{
+    this._pack.push(item) 
+    console.log(Player.name + ' has successfully re-upped on ' + item.name)
+    return true 
+   }
+ };
 
 /**
  * Player Class Method => discardItem(item)
@@ -180,6 +195,18 @@ class Food extends Item {
  * @return {boolean} true/false     Whether player was able to remove item from pack.
  */
 
+ discardItem (item) {
+   let itemIndex = this._pack.indexOf(item)
+  if(itemIndex >= 0){
+    this._pack.splice(itemIndex, 1)
+    console.log(Player.name + ' has successfully discarded ' + item)
+    return true;
+  }else{
+    console.log('nothing was discarded since the ' + item.name + ' could not be found')
+    return false;
+  }
+ };
+ 
 
 /**
  * Player Class Method => equip(itemToEquip)
@@ -201,6 +228,20 @@ class Food extends Item {
  * @param {Weapon} itemToEquip  The weapon item to equip.
  */
 
+ equip (itemToEquip) {
+   let itemIndex = this._pack.indexOf(itemToEquip) //shows index of item in pack
+  if(itemToEquip instanceof Weapon){ //determines if item is a weapon
+    if(itemIndex >= 0){ //item is in the pack
+      if(this.equipped === false){ //if false then no item equipped aka none in hand
+        this.equipped = itemToEquip; //equipped = item -> aka what index of item is pulled
+        this._pack.splice(itemIndex,1) //removing item from pack after index is determined
+      }else{
+        this._pack.splice(itemIndex,1,this.equipped)
+        this.equipped = itemToEquip;
+      }
+    }
+  }
+ };
 
 /**
  * Player Class Method => eat(itemToEat)
@@ -221,6 +262,18 @@ class Food extends Item {
  * @param {Food} itemToEat  The food item to eat.
  */
 
+ eat (itemToEat) {
+   let itemIndexFood = this._pack.indexOf(itemToEat)
+  if(itemToEat instanceof Food){//determines if item is food
+    if(itemIndexFood >= 0){
+      this._pack.splice(itemIndexFood,1);
+      this.health += itemToEat.energy;
+      if(this.health > this._maxHealth){
+        this.health = this._maxHealth;
+      }
+    }
+  }
+ };
 
 /**
  * Player Class Method => useItem(item)
@@ -235,6 +288,14 @@ class Food extends Item {
  * @param {Item/Weapon/Food} item   The item to use.
  */
 
+ useItem (item) {
+  if(item instanceof Weapon){
+    this.equip(item)
+  }
+  if(item instanceof Food){
+    this.eat(item)
+  }
+ };
 
 /**
  * Player Class Method => equippedWith()
@@ -249,8 +310,17 @@ class Food extends Item {
  * @name equippedWith
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
+ equippedWith (){
+   if (this.equppied){
+     console.log(this.name + " is equipped with a " + this.equipped.name);
+     return this.equipped.name
+   }else{
+     console.log(this.name + " is not equipped ");
+     return false;
+   }
 
  }
+ };
 
 /**
  * Class => Zombie(health, strength, speed)
@@ -267,7 +337,16 @@ class Food extends Item {
  * @property {number} speed
  * @property {boolean} isAlive      Default value should be `true`.
  */
-
+ 
+ class Zombie {
+   constructor(health, strength, speed){
+     this.health = health;
+     this.strength = strength;
+     this.speed = speed;
+     this.isAlive = true;
+     this._maxHealth = health;
+   }
+ };
 
 /**
  * Class => FastZombie(health, strength, speed)
@@ -290,7 +369,14 @@ class Food extends Item {
  * -----------------------------
  */
 
-
+class FastZombie extends Zombie{
+  constructor(health, strength, speed){
+    super(health, strength, speed);
+    this.health = health;
+    this.strength = strength;
+    this.speed = speed;
+  }
+};
 
 /**
  * Class => StrongZombie(health, strength, speed)
@@ -307,6 +393,14 @@ class Food extends Item {
  * @param {number} speed            The zombie's speed.
  */
 
+ class StrongZombie extends Zombie{
+   constructor(health, strength, speed){
+     super(health, strength, speed);
+     this.health = health;
+     this.strength = strength;
+     this.speed = speed;
+   }
+ };
 
 /**
  * StrongZombie Extends Zombie Class
@@ -402,3 +496,4 @@ function runGame() {
   // console.log("After health: " + player.health);
   // player.checkPack();
 }
+
